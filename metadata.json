@@ -1,0 +1,6 @@
+{
+  "name": "Job Buddy",
+  "description": "AI-powered job discovery, resume matching, and automated application workflow platform.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

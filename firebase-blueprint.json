@@ -1,0 +1,95 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "User profile, contact details, parsed skills, and onboarding status",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "email": { "type": "string", "maxLength": 256 },
+        "fullName": { "type": "string", "maxLength": 128 },
+        "headline": { "type": "string", "maxLength": 256 },
+        "summary": { "type": "string", "maxLength": 3000 },
+        "phone": { "type": "string", "maxLength": 64 },
+        "location": { "type": "string", "maxLength": 128 },
+        "githubUrl": { "type": "string", "maxLength": 256 },
+        "linkedinUrl": { "type": "string", "maxLength": 256 },
+        "portfolioUrl": { "type": "string", "maxLength": 256 },
+        "skills": { "type": "array", "maxLength": 100 },
+        "preferredRoles": { "type": "array", "maxLength": 20 },
+        "onboardingCompleted": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "email", "fullName"]
+    },
+    "Application": {
+      "title": "Job Application",
+      "description": "Autonomous browser job application submission records",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "jobId": { "type": "string", "maxLength": 128 },
+        "company": { "type": "string", "maxLength": 128 },
+        "role": { "type": "string", "maxLength": 128 },
+        "status": { "type": "string", "enum": ["queued", "in_progress", "submitted", "needs_info", "failed"] },
+        "platform": { "type": "string", "maxLength": 64 },
+        "matchScore": { "type": "number" },
+        "appliedAt": { "type": "string", "format": "date-time" },
+        "sessionId": { "type": "string", "maxLength": 128 }
+      },
+      "required": ["id", "userId", "company", "role", "status"]
+    },
+    "ChatMessage": {
+      "title": "Chat Message",
+      "description": "Multi-turn Gemini chatbot dialogue turns",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "role": { "type": "string", "enum": ["user", "model", "system"] },
+        "content": { "type": "string", "maxLength": 10000 },
+        "thought": { "type": "string", "maxLength": 10000 },
+        "modelUsed": { "type": "string", "maxLength": 64 },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "role", "content"]
+    },
+    "ModuleReport": {
+      "title": "Module Realtime Report",
+      "description": "Realtime analytics, scores, and deep intelligence reports for dashboard, jobs, resume, and applications",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "moduleType": { "type": "string", "enum": ["dashboard", "jobsearch", "resume", "applications"] },
+        "scores": { "type": "object" },
+        "summary": { "type": "string", "maxLength": 5000 },
+        "metrics": { "type": "object" },
+        "recommendations": { "type": "array" },
+        "generatedAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "moduleType"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Stores user profiles with owner-restricted access"
+    },
+    "/users/{userId}/applications/{applicationId}": {
+      "schema": "Application",
+      "description": "Tracks automated job applications per user"
+    },
+    "/users/{userId}/chats/{chatId}": {
+      "schema": "ChatMessage",
+      "description": "Stores multi-turn Gemini chatbot messages per user"
+    },
+    "/users/{userId}/reports/{reportId}": {
+      "schema": "ModuleReport",
+      "description": "Realtime scores and diagnostics per module for dashboard, job search, resume, and applications"
+    }
+  }
+}
